@@ -5,21 +5,25 @@
   user: name={{ gitlab_user }} comment="GitLab" createhome=yes
 
 - name: Clone GitLab source code from git.
+  sudo_user: "{{ gitlab_user }}"
   git: repo=https://github.com/gitlabhq/gitlabhq.git dest=/home/{{ gitlab_user }}/gitlab version={{ gitlab_branch }}
   changed_when: False
 
 ## setup file system hierarchy and permissions
 - name: ensure GitLab can write to the 'log' directory
-  file: path=/home/{{ gitlab_user }}/log state=directory recurse=yes mode=0700 owner={{ gitlab_user }}
+  file: path=/home/{{ gitlab_user }}/log state=directory recurse=yes mode=0755 owner={{ gitlab_user }}
 
 - name: ensure GitLab can write to 'tmp'
-  file: path=/home/{{ gitlab_user }}/tmp state=directory recurse=yes mode=0700 owner={{ gitlab_user }}
+  file: path=/home/{{ gitlab_user }}/tmp state=directory recurse=yes mode=0755 owner={{ gitlab_user }}
 
 - name: ensure GitLab can write to 'tmp/pids'
-  file: path=/home/{{ gitlab_user }}/tmp/pids state=directory recurse=yes mode=0700 owner={{ gitlab_user }}
+  file: path=/home/{{ gitlab_user }}/tmp/pids state=directory recurse=yes mode=0755 owner={{ gitlab_user }}
+
+- name: ensure nginx can read 'tmp/sockets'
+  file: path=/home/{{ gitlab_user }}/tmp/sockets state=directory recurse=yes mode=0755 owner={{ gitlab_user }}
 
 - name: ensure GitLab can write to 'public/uploads'
-  file: path=/home/{{ gitlab_user }}/gitlab/public/uploads state=directory recurse=yes mode=0700 owner={{ gitlab_user }}
+  file: path=/home/{{ gitlab_user }}/gitlab/public/uploads state=directory recurse=yes mode=0755 owner={{ gitlab_user }}
 
 # would be nice if next 2 can be merged
 - name: remove GitLab 'log' directory
@@ -48,9 +52,6 @@
 - name: ensure GitLab config file exists
   template: src=gitlab.yml dest=/home/{{ gitlab_user }}/gitlab/config/gitlab.yml mode=0640 owner=root group={{ gitlab_user }}
 
-- name: ensure uwsgi config file exists
-  template: src=uwsgi.ini dest=/etc/uwsgi/vassals/gitlab.ini mode=0644 owner=root group=root
-
 - name: ensure database config is written
   template: src=database.yml dest=/home/{{ gitlab_user }}/gitlab/config/database.yml mode=0640 owner=root group={{ gitlab_user }}
 
@@ -70,11 +71,12 @@
       |  bundle exec rake gitlab:setup RAILS_ENV=production
       && touch /home/{{ gitlab_user }}/gitlab:setup
 
-#- name: Gitlab upgrade
-#  shell: >
-#    chdir=/home/{{ gitlab_user }}/gitlab
-#    bundle exec rake db:migrate RAILS_ENV=production
-#    bundle exec rake cache:clear RAILS_ENV=production
-#    bundle exec rake assets:clean  RAILS_ENV=production
-#    bundle exec rake assets:precompile  RAILS_ENV=production
-#
+- name: Gitlab upgrade
+  sudo_user: "{{ gitlab_user }}"
+  shell: >
+      chdir=/home/{{ gitlab_user }}/gitlab
+      bundle exec rake db:migrate RAILS_ENV=production
+      && bundle exec rake cache:clear RAILS_ENV=production
+      && bundle exec rake assets:clean  RAILS_ENV=production
+      && bundle exec rake assets:precompile  RAILS_ENV=production
+

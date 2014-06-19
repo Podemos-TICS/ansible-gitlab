@@ -1,0 +1,22 @@
+---
+# Gitlab init
+
+- name: Copy init script
+  command: /bin/cp /home/{{ gitlab_user }}/gitlab/lib/support/init.d/gitlab /etc/init.d/gitlab 
+
+- name: Gitlab init script permissions
+  file: path=/etc/init.d/gitlab owner=root group=root mode=0755
+
+- name: Copy unicorn file 
+  command: /bin/cp /home/{{ gitlab_user }}/gitlab/config/unicorn.rb.example  /home/{{ gitlab_user }}/gitlab/config/unicorn.rb
+
+- name: Gitlab init script permissions
+  file: path=/etc/init.d/gitlab owner=root group=root mode=0755
+
+- name: Enable gitlab service
+  service: name=gitlab enabled=yes state=started
+
+- name: ensure sockect for nginx exists
+  file: state=file path=/home/{{ gitlab_user }}/tmp/sockets/gitlab.socket owner={{ gitlab_user }} group={{ gitlab_user }} mode=4777
+
+

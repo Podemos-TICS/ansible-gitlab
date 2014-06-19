@@ -2,6 +2,7 @@
 # GitLab Shell
 
 - name: ensure Gitlab-Shell git repository is cloned
+  sudo_user: "{{ gitlab_user }}"
   git: repo=https://github.com/gitlabhq/gitlab-shell.git dest=/home/{{ gitlab_user }}/gitlab-shell version={{ gitlab_shell_version}}
 
 - name: ensure gitlab-shell config is written
