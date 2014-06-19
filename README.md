@@ -36,6 +36,24 @@ Usage
 
     ansible-galaxy install raulkite.gitlab
 
+    Create a gitlab.yml with this content:
+    ```
+    ---
+    - hosts: all
+      user: root
+
+      pre_tasks:
+      - name: apt get update
+        apt: update_cache=yes
+
+      vars:
+        gitlab_hostname: "gitlab.test.com"                                                             
+ 
+      roles:
+      - raulkite.gitlab
+
+    ```
+
 Also check the [Ansible Galaxy](https://galaxy.ansibleworks.com/intro) about page.
 
 
