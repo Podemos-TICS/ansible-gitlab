@@ -41,13 +41,13 @@ Create a gitlab.yml with this content:
     ---
     - hosts: all
       user: root
-
+      
       pre_tasks:
       - name: apt get update
         apt: update_cache=yes
-
+        
       vars:
-        gitlab_hostname: "gitlab.test.com"                                                             
+        gitlab_hostname: "gitlab.test.com"
  
       roles:
       - raulkite.gitlab
