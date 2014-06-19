@@ -3,10 +3,11 @@
 - name: Making sure nginx is present...
   apt: state=present pkg=nginx
 
+- name: Copy gitlab nginx site config
+  command: /bin/cp /home/{{ gitlab_user }}/gitlab/lib/support/nginx/gitlab /etc/nginx/sites-available/gitlab
+
 - name: Making sure that GitLab Nginx site is available...
-  template: src=nginx.conf dest=/etc/nginx/sites-available/gitlab mode=0755
-#  notify: 
-#    - restart nginx
+  file: path=/etc/nginx/sites-available/gitlab mode=0755
 
 - name: Making sure that the default Nginx site is not enabled...
   file: path=/etc/nginx/sites-enabled/default state=absent

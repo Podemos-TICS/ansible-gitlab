@@ -3,6 +3,7 @@
 - include: databases.yml
 - include: gitlab.yml
 - include: gitlab-shell.yml
+- include: gitlab-init.yml
 - include: nginx.yml
 
 ## TODO

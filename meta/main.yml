@@ -1,17 +1,15 @@
 ---
 galaxy_info:
-  author: Damjan Georgievski
+  author: Raul Sanchez
   description: a role that downloads and install gitlab
   license: BSD
   min_ansible_version: 1.4
   platforms:
     - name: Ubuntu
       versions:
-      - saucy
+      - trusty
     - name: Debian
       versions:
       - wheezy
   categories:
     - web
-dependencies:
-  - gdamjan.uwsgi
