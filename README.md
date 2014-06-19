@@ -36,8 +36,8 @@ Usage
 
     ansible-galaxy install raulkite.gitlab
 
-    Create a gitlab.yml with this content:
-    ```
+Create a gitlab.yml with this content:
+
     ---
     - hosts: all
       user: root
@@ -52,7 +52,9 @@ Usage
       roles:
       - raulkite.gitlab
 
-    ```
+and exec playbook:
+
+    ansible-playbook gitlab.yml
 
 Also check the [Ansible Galaxy](https://galaxy.ansibleworks.com/intro) about page.
 
