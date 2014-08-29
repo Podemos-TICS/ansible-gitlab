@@ -1,0 +1,11 @@
+---
+- hosts: all
+  user: root
+
+  pre_tasks:
+  - name: apt get update
+    apt: update_cache=yes
+
+  tasks:
+  - include_vars: defaults/main.yml
+  - include: tasks/main.yml

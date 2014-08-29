@@ -8,6 +8,9 @@ Based on gdamjan.gitlab
 
 Only tested in Ubuntu 14.04 server
 
+Once installed, the default user for gitlab is admin@local.host and the
+default password is 5iveL!fe
+
 Requirements
 ------------
 
@@ -58,6 +61,24 @@ and exec playbook:
 
 Also check the [Ansible Galaxy](https://galaxy.ansibleworks.com/intro) about page.
 
+Usage as playbook
+-----------------
+Using your inventory, you may add a install.yml that will allow you to run the role as
+a playbook. For example:
+
+```
+---
+- hosts: all
+  user: root
+
+  pre_tasks:
+  - name: apt get update
+    apt: update_cache=yes
+
+  tasks:
+  - include_vars: defaults/main.yml
+  - include: tasks/main.yml
+```
 
 License
 -------

@@ -9,7 +9,7 @@
   service: name=redis-server state=started enabled=yes
 
 - name: ensure database for gitlab exists
-  mysql_db: state=present name={{ gitlab_db_name }} collation=utf8_unicode_ci encoding=utf8
+  mysql_db: state=present name={{ gitlab_db_name }} collation=utf8_unicode_ci encoding=utf8 login_user=root login_password={{ gitlab_db_passwd }}
 
 - name: ensure database user for gitlab is present and has privleges
-  mysql_user: state=present host=localhost name={{ gitlab_db_user }} password={{ gitlab_db_passwd }} priv={{ gitlab_db_name }}.*:ALL
+  mysql_user: state=present login_user=root login_password={{ gitlab_db_passwd }} host=localhost name={{ gitlab_db_user }} password={{ gitlab_db_passwd }} priv={{ gitlab_db_name }}.*:ALL
